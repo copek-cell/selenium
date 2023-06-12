@@ -7,8 +7,9 @@ import httpx
 import time
 import concurrent.futures
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.keys import Keys
 
 app = FastAPI()
 
@@ -86,12 +87,16 @@ def main(headers, keyword, pages):
 
 def scrape(keyword, page):
     soup_produk = []
-    # chrome_options = Options()
-    # chrome_options.add_argument("--headless")
+    opsi = webdriver.ChromeOptions()
 
-    driver = webdriver.Chrome("./chromedriver")
+    opsi.add_experimental_option("excludeSwitches", ["enable-logging"])
+    opsi.add_argument("--headless")
+    servis = Service("./chromedriver")
     try:
         # await asyncio.sleep(2)
+        driver = webdriver.Chrome(service=servis, options=opsi)
+        driver.set_page_load_timeout(30)
+        driver.maximize_window()
         driver.get(f"https://www.tokopedia.com/search?q={keyword}&page={page}")
         print("Menunggu reload...")
         time.sleep(
