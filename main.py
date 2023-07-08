@@ -11,7 +11,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from enum import Enum
 import psutil
-# dsgs
 # from typing import List, Dict, Optional
 import cpuinfo
 import multiprocessing
